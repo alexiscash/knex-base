@@ -1,4 +1,4 @@
-> ** A ORM base class with full CRUD functionality built on top of knex
+> **A ORM base class with full CRUD functionality built on top of knex**
 
 ## Example
 
