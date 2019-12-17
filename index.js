@@ -24,7 +24,7 @@ class Base {
     // => self.all
     static async all() {
         const arr = await knex(this.tableName + 's');
-        return arr;
+        return arr.map(thing => new this(thing));
     }
 
     // takes an obj and creates a new record in db
