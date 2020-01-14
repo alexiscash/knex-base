@@ -6,7 +6,6 @@ class Base {
         Object.assign(this, thang)
     }
 
-
     static establishConnection(connection) {
         knex = connection
     }
@@ -15,18 +14,22 @@ class Base {
         return this.name.toLowerCase();
     }
 
-    // find by id
-    static async find(id) {
-        const [thang] = await knex(this.tableName + 's').where({ id: id });
-        return new this(thang);
-    }
-
     // => self.all
     static async all() {
         const arr = await knex(this.tableName + 's');
         return arr.map(thing => new this(thing));
     }
 
+    // find by id
+    static async find(id) {
+        const [thang] = await knex(this.tableName + 's').where({ id: id });
+        return new this(thang);
+    }
+
+    static async findBy(obj) {
+        const [user] = await knex('users').where(obj)
+        return new this(user);
+    }
     // takes an obj and creates a new record in db
     static async create(obj) {
         const [recordId] = await knex(this.tableName + 's').insert(obj)
@@ -51,13 +54,6 @@ class Base {
             return record;
         }
     }
-
-    // static hasMany(name) {
-    //     this.prototype[name] = async function () {
-    //         const arr = await knex(name).where({ [`${this.constructor.tableName}_id`]: this.id });
-    //         return arr;
-    //     }
-    // }
 
     static hasMany(name, opts = {}) {
         if (opts.through) {
@@ -84,7 +80,5 @@ class Base {
     }
 
 }
-
-
 
 module.exports = Base
