@@ -20,6 +20,11 @@ class Base {
         return arr.map(thing => new this(thing));
     }
 
+    static async where(obj) {
+        const [thang] = knex(this.tableName + 's').where(obj);
+        return new this(thang);
+    }
+
     // find by id
     static async find(id) {
         const [thang] = await knex(this.tableName + 's').where({ id: id });
@@ -27,8 +32,8 @@ class Base {
     }
 
     static async findBy(obj) {
-        const [user] = await knex('users').where(obj)
-        return new this(user);
+        const [thang]  = await knex(this.tableName).where(obj)
+        return new this(thang);
     }
     // takes an obj and creates a new record in db
     static async create(obj) {
