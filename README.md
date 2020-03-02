@@ -94,6 +94,15 @@ Finding and updating existing records:
 const user = User.find(1);
 // => instance of User class with that id
 
+const posts = user.posts();
+// => array of objects associated with that user's id.
+// does not return instances of Post class
+
+const post = new Post(posts[0]);
+post.user();
+// => object associated with that post's id.
+// does not return instance of User class
+
 user.update({firstName: 'JOHN'});
 // => updates record and returns new object
 
