@@ -133,12 +133,6 @@ class Base {
         await knex(this.constructor.tableName).insert(this);
     }
 
-    static async create(obj) {
-        const [ recordId ] = await knex(this.tableName).insert(obj)
-        const [ record ] = await knex(this.tableName).where({ id: recordId })
-        return new this(record);
-    }
-
     // takes obj and updates that record
     async update(obj) {
         await knex(this.tableName).where({ id: this.id }).update(obj);
