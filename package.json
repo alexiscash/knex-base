@@ -7,6 +7,9 @@
     "type": "git",
     "url": "git@github.com:alexiscash/knex-base.git"
   },
+  "bugs": {
+    "url": "https://github.com/alexiscash/knex-base/issues"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
