@@ -1,33 +1,118 @@
-> **A ORM base class with full CRUD functionality built on top of knex**
+# knex-base
 
-## Example
+ORM modeled after [Rails][]' ActiveRecord and built on knex
+
+[rails]: https://rubyonrails.org/
+
+## Introduction
+
+knex-base was created to bring the simplicity of [ActiveRecord][]
+together with the power of [Knex][]
+
+[activerecord]: https://guides.rubyonrails.org/active_record_basics.html
+
+[knex]: http://knexjs.org
+
+## Getting Started
+
+You will have to begin by install [Knex][] and one of its' supported
+database drivers as peer dependencies.
+
+```bash
+$ npm install knex --save
+$ npm install knex-base --save
+
+# The current version only supports sqlite3
+$ npm install sqlite3 --save
+```
+
+Now you must give knex-base your database settings.
 
 ```js
-
-const databaseSettings = require('./knexfile').development;
-const knex = require('knex')(databaseSettings);
-
+const knex = require('knex');
 const Base = require('knex-base');
-Base.establishConnection(knex)
+
+const dbSettings = {
+    client: 'sqlite3',
+    connection: {
+        filename: './dev.sqlite3'
+    },
+    useNullAsDefault: true
+};
+
+Base.establishConnection(dbSettings);
+
+// create models and relationships
 
 class User extends Base {
 
 }
 
+// adds function to obj proto to retrieve appropriate records
+User.hasMany('posts');
+User.hasMany('likes', { through: 'posts' })
+
 class Post extends Base {
 
 }
 
-class Thang extends Base {
+// pluralization matters
+Post.belongsTo('user');
+
+class Like extends Base {
 
 }
 
-User.hasMany('posts');
-User.hasMany('thangs', { through: 'posts' })
-
-const user = User.create({});
-
-user.posts();
-
-user.update({});
+Like.belongsTo('post');
 ```
+
+## Examples
+
+Creating and saving records:
+
+```js
+// create instance and save it
+const user = new User({
+    name: 'john',
+    email: 'john@website.example',
+    company: 'exampleCompany'
+});
+user.save();
+
+// creates and saves in one line
+const user2 = User.create({
+    name: 'Jane',
+    email: 'Jane@website.example',
+    company: 'exampleCompany'
+});
+// => instance of User class
+```
+
+Finding and updating existing records:
+
+```js
+const user = User.find(1);
+// => instance of User class with that id
+
+user.update({firstName: 'JOHN'});
+// => updates record and returns new object
+
+// deletes record in db with that id
+user.delete();
+
+const user2 = User.findBy({name: 'john'});
+// => instance of User class with that property
+
+User.where({company: 'exampleCompany'});
+// => array of records with those properties
+
+User.first();
+// => first record as a User object
+
+User.second();
+// => second record etc., up to tenth()
+
+User.all();
+// => array of all records as User objects
+```
+
