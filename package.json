@@ -1,8 +1,12 @@
 {
   "name": "knex-base",
   "version": "1.0.0",
-  "description": "A basic ORM with full CRUD built on knex",
+  "description": "A knex ORM modeled after Rails' ActiveRecord",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:alexiscash/knex-base.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
