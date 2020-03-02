@@ -1,6 +1,6 @@
 {
   "name": "knex-base",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "A basic ORM with full CRUD built on knex",
   "main": "index.js",
   "scripts": {
