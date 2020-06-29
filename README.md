@@ -15,7 +15,7 @@ together with the power of [Knex][]
 
 ## Getting Started
 
-You will have to begin by install [Knex][] and one of its supported
+You will have to begin by installing [Knex][] and one of its supported
 database drivers as peer dependencies.
 
 ```bash
