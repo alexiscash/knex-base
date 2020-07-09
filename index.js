@@ -1,6 +1,6 @@
 let knex;
 
-class Base {
+class SQLiteBase {
   constructor(obj) {
     Object.assign(this, obj);
   }
@@ -165,6 +165,15 @@ class Base {
   }
 }
 
-Base.addNth();
+SQLiteBase.addNth();
 
-module.exports = Base;
+class MongoDBBase {
+  static test() {
+    console.log("this is the mongo one");
+  }
+}
+
+module.exports = {
+  SQLiteBase,
+  MongoDBBase,
+};
