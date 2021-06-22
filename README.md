@@ -30,7 +30,7 @@ Now you must give knex-base your database settings.
 
 ```js
 const knex = require('knex');
-const Base = require('knex-base');
+const Base = require('knex-base').SQLite;
 
 const dbSettings = {
     client: 'sqlite3',
