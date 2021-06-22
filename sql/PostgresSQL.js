@@ -1,11 +1,7 @@
-let knex;
+const Base = require('./Base');
 
-class PostgresSQL {
-  static test() {
-    console.log('postgres sql');
-  }
+class PostgresSQL extends Base{
+  
 }
 
-module.exports = {
-  PostgresSQL
-};
+module.exports = PostgresSQL

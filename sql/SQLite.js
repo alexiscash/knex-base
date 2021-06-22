@@ -1,29 +1,6 @@
-let knex;
+const Base = require('./Base');
 
-class SQLite {
-  constructor(obj) {
-    Object.assign(this, obj);
-  }
-
-  // static methods
-
-  static test() {
-    console.log("You're using knex-base ;).");
-  }
-
-  static establishConnection(connection) {
-    knex = connection;
-  }
-
-  static get tableName() {
-    const table = this.name + "s";
-    return table.toLowerCase();
-  }
-
-  static get recordName() {
-    return this.name.toLowerCase();
-  }
-
+class SQLite extends Base {
   // => self.all
   static async all() {
     const records = await knex(this.tableName);
@@ -74,7 +51,7 @@ class SQLite {
   // TODO test what happens if record does not exist
   static async where(obj) {
     const records = knex(this.tableName).where(obj);
-    return records.map((thing) => new this(thing));
+    return records.map((record) => new this(record));
   }
 
   // find by id
@@ -167,6 +144,4 @@ class SQLite {
 
 SQLite.addNth()
 
-module.exports = {
-  SQLite
-}
+module.exports = SQLite
