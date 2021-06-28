@@ -1,7 +1,7 @@
-const SQLite = require('./sql/SQLite.js');
-const MongoDB = require('./sql/MongoDb.js');
+const SQLite = require('./sql/SQLite');
+const PostgresSQL = require('./sql/PostgresSQL');
 
 module.exports = {
   SQLite,
-  MongoDB,
+  PostgresSQL
 }; 
