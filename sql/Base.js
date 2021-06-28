@@ -1,4 +1,4 @@
-let knex; 
+let knex;
 
 class Base {
   constructor(obj) {
@@ -21,7 +21,6 @@ class Base {
   static get recordName() {
     return this.name.toLowerCase();
   }
-
 }
 
-module.exports = Base
+module.exports = Base;
