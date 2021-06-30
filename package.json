@@ -4,7 +4,7 @@
   "description": "A knex ORM modeled after Rails' ActiveRecord",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cd test && node --trace-warnings index.js && cd .."
   },
   "keywords": [
     "knex",
@@ -19,5 +19,10 @@
   },
   "bugs": {
     "url": "https://github.com/alexiscash/knex-base/issues"
+  },
+  "devDependencies": {
+    "knex": "^0.95.6",
+    "pg": "^8.6.0",
+    "sqlite3": "^5.0.2"
   }
 }

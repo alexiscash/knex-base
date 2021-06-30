@@ -1,6 +1,8 @@
-let knex;
+// let knex;
 
 class Base {
+  static knex;
+
   constructor(obj) {
     Object.assign(this, obj);
   }
@@ -10,7 +12,7 @@ class Base {
   }
 
   static establishConnection(connection) {
-    knex = connection;
+    this.knex = connection;
   }
 
   static get tableName() {

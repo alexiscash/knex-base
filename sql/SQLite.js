@@ -3,22 +3,23 @@ const Base = require('./Base');
 class SQLite extends Base {
   // => self.all
   static async all() {
-    const records = await knex(this.tableName);
+    const { knex, tableName } = this;
+    const records = await knex(tableName);
     return records.map((record) => new this(record));
   }
 
   static addNth() {
     const arr = [
-      "first",
-      "second",
-      "third",
-      "fourth",
-      "fifth",
-      "sixth",
-      "seventh",
-      "eighth",
-      "ninth",
-      "tenth",
+      'first',
+      'second',
+      'third',
+      'fourth',
+      'fifth',
+      'sixth',
+      'seventh',
+      'eighth',
+      'ninth',
+      'tenth',
     ];
 
     for (let i = 0; i < arr.length; i++) {
@@ -50,31 +51,37 @@ class SQLite extends Base {
 
   // TODO test what happens if record does not exist
   static async where(obj) {
-    const records = knex(this.tableName).where(obj);
+    const { knex, tableName } = this;
+    const records = knex(tableName).where(obj);
     return records.map((record) => new this(record));
   }
 
   // find by id
   static async find(id) {
-    const [record] = await knex(this.tableName).where({ id });
+    const { knex, tableName } = this;
+    const [record] = await knex(tableName).where({ id });
     return new this(record);
   }
 
   static async findBy(obj) {
-    const [record] = await knex(this.tableName).where(obj);
+    const { knex, tableName } = this;
+    const [record] = await knex(tableName).where(obj);
     return new this(record);
   }
+
   // takes an obj and creates a new record in db
   static async create(obj) {
     // queries db twice. not very efficient
-    const [recordId] = await knex(this.tableName).insert(obj);
-    const [record] = await knex(this.tableName).where({ id: recordId });
+    const { knex, tableName } = this;
+    const [recordId] = await knex(tableName).insert(obj);
+    const [record] = await knex(tableName).where({ id: recordId });
     return new this(record);
   }
 
   static belongsTo(name) {
     this.prototype[name] = async function () {
-      const [record] = await knex(name.toLowerCase() + "s").where({
+      const { knex } = this;
+      const [record] = await knex(name.toLowerCase() + 's').where({
         id: this[`${name}_id`],
       });
       return record;
@@ -88,7 +95,7 @@ class SQLite extends Base {
         // across all methods. Don't want one to return error and another to log it or whatever
 
         // try {
-        //     const arr = await knex(name)
+        //     const arr = await this.knex(name)
         //             .innerJoin(opts.through, `${name}.id`, `${opts.through}.${name.substr(0, name.length -1)}_id`)
         //             .where({ [`${opts.through}.${this.constructor.recordName}_id`]: this.id })
         //             .select(`${name}.*`)
@@ -98,7 +105,7 @@ class SQLite extends Base {
         //     console.error(err);
         // }
 
-        const arr = await knex(name)
+        const arr = await this.knex(name)
           .innerJoin(
             opts.through,
             `${name}.id`,
@@ -115,7 +122,7 @@ class SQLite extends Base {
     }
 
     this.prototype[name] = async function () {
-      const records = await knex(name).where({
+      const records = await this.knex(name).where({
         [`${this.constructor.recordName}_id`]: this.id,
       });
       return records;
@@ -125,23 +132,31 @@ class SQLite extends Base {
   // instance methods
 
   async save() {
-    await knex(this.constructor.tableName).insert(this);
+    await this.constructor.knex(this.constructor.tableName).insert(this);
   }
 
   // takes obj and updates that record
   async update(obj) {
-    await knex(this.tableName).where({ id: this.id }).update(obj);
-    const [record] = await knex(this.constructor.tableName).where({
-      id: this.id,
-    });
+    await this.constructor
+      .knex(this.constructor.tableName)
+      .where({ id: this.id })
+      .update(obj);
+    const [record] = await this.constructor
+      .knex(this.constructor.tableName)
+      .where({
+        id: this.id,
+      });
     return new this.constructor(record);
   }
 
   async delete() {
-    await knex(this.tableName).where({ id: this.id }).del();
+    await this.constructor
+      .knex(this.constructor.tableName)
+      .where({ id: this.id })
+      .del();
   }
 }
 
-SQLite.addNth()
+SQLite.addNth();
 
-module.exports = SQLite
+module.exports = SQLite;
