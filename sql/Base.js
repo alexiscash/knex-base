@@ -8,7 +8,7 @@ class Base {
   }
 
   static test() {
-    console.log("You're using knex-base, baby.");
+    console.log('knex-base has been succesfully loaded');
   }
 
   static establishConnection(connection) {
@@ -22,6 +22,10 @@ class Base {
 
   static get recordName() {
     return this.name.toLowerCase();
+  }
+
+  static async del() {
+    await this.knex(this.tableName).del();
   }
 }
 

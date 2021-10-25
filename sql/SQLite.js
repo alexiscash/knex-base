@@ -42,11 +42,11 @@ class SQLite extends Base {
     const records = await this.all();
 
     if (!num) {
-      return records[records.length - 1];
+      return new this(records[records.length - 1]);
     }
     const len = records.length;
     const arr = records.splice(len - num, len - 1);
-    return arr;
+    return arr.map((t) => new this(t));
   }
 
   // TODO test what happens if record does not exist
@@ -88,7 +88,10 @@ class SQLite extends Base {
     };
   }
 
-  static hasMany(name, opts = {}) {
+  static hasMany(newConnection, opts = {}) {
+    const name = newConnection.tableName;
+    const { knex } = this;
+
     if (opts.through) {
       this.prototype[name] = async function () {
         // want to add error handling all at once to be consistent
@@ -105,7 +108,7 @@ class SQLite extends Base {
         //     console.error(err);
         // }
 
-        const arr = await this.knex(name)
+        const arr = await knex(name)
           .innerJoin(
             opts.through,
             `${name}.id`,
@@ -122,7 +125,7 @@ class SQLite extends Base {
     }
 
     this.prototype[name] = async function () {
-      const records = await this.knex(name).where({
+      const records = await knex(name).where({
         [`${this.constructor.recordName}_id`]: this.id,
       });
       return records;
