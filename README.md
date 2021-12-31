@@ -22,14 +22,12 @@ $ npm install knex
 $ npm install knex-base
 
 $ npm install sqlite3
+$ npm install pg
 ```
 
-Now you must give knex-base your database settings.
+Import base class and register knex object
 
 ```js
-const knex = require('knex');
-const Base = require('knex-base').SQLite;
-
 const dbSettings = {
   client: 'sqlite3',
   connection: {
@@ -37,26 +35,25 @@ const dbSettings = {
   },
   useNullAsDefault: true,
 };
+const knex = require('knex')(dbSettings);
 
-// All classes inheriting from base will have access to db connection
-Base.establishConnection(dbSettings);
+// All subclasses will have access to db connection
+const Base = require('knex-base')(knex).SQLite;
 
 // create models and relationships
 
 class User extends Base {}
-
-// adds function to obj proto to retrieve appropriate records
-User.hasMany('posts');
-User.hasMany('likes', { through: 'posts' });
-
 class Post extends Base {}
-
-// pluralization matters
-Post.belongsTo('user');
-
 class Like extends Base {}
 
-Like.belongsTo('post');
+// adds function to obj proto to retrieve appropriate records
+User.hasMany(Post);
+
+Post.belongsTo(User);
+
+Like.belongsTo(Post);
+
+User.hasMany(Like, { through: Post });
 ```
 
 ## Examples
