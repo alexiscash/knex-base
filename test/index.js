@@ -8,17 +8,20 @@ it's possible that i will be able to reuse code from previous
 */
 
 const dbSettings = require('./knexfile').development;
-
 const knex = require('knex')(dbSettings);
 
-const Base = require('../sql/SQLite');
-Base.establishConnection(knex);
+const Base = require('../index')(knex).SQLite;
+// Base.connect(knex);
 
 class User extends Base {}
 
 class Post extends Base {}
 
+class Like extends Base {}
+
 User.hasMany(Post);
+
+User.hasMany(Like, { through: Post });
 
 async function clearTables() {
   await User.del();

@@ -1,10 +1,10 @@
 {
   "name": "knex-base",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A knex ORM modeled after Rails' ActiveRecord",
   "main": "index.js",
   "scripts": {
-    "test": "cd test && node --trace-warnings index.js && cd .."
+    "test": "node test/index.js"
   },
   "keywords": [
     "knex",

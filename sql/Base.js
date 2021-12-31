@@ -11,7 +11,7 @@ class Base {
     console.log('knex-base has been succesfully loaded');
   }
 
-  static establishConnection(connection) {
+  static connect(connection) {
     this.knex = connection;
   }
 

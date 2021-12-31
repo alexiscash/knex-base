@@ -92,25 +92,13 @@ class SQLite extends Base {
     const name = newConnection.tableName;
     const { knex } = this;
 
+    // has many through
     if (opts.through) {
+      const throughTableName = opts.through.tableName;
       this.prototype[name] = async function () {
-        // want to add error handling all at once to be consistent
-        // across all methods. Don't want one to return error and another to log it or whatever
-
-        // try {
-        //     const arr = await this.knex(name)
-        //             .innerJoin(opts.through, `${name}.id`, `${opts.through}.${name.substr(0, name.length -1)}_id`)
-        //             .where({ [`${opts.through}.${this.constructor.recordName}_id`]: this.id })
-        //             .select(`${name}.*`)
-        //             .groupBy(`${name}.id`);
-        //     return arr;
-        // } catch(err) {
-        //     console.error(err);
-        // }
-
         const arr = await knex(name)
           .innerJoin(
-            opts.through,
+            throughTableName,
             `${name}.id`,
             `${opts.through}.${name.substr(0, name.length - 1)}_id`
           )
@@ -124,6 +112,7 @@ class SQLite extends Base {
       return; // guard clause
     }
 
+    // has many
     this.prototype[name] = async function () {
       const records = await knex(name).where({
         [`${this.constructor.recordName}_id`]: this.id,
