@@ -21,7 +21,7 @@
     "url": "https://github.com/alexiscash/knex-base/issues"
   },
   "devDependencies": {
-    "knex": "^0.95.6",
+    "knex": "^2.4.0",
     "pg": "^8.6.0",
     "sqlite3": "^5.0.2"
   }
