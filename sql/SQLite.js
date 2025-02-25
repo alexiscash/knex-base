@@ -8,19 +8,8 @@ class SQLite extends Base {
     return records.map((record) => new this(record));
   }
 
-  static addNth() {
-    const arr = [
-      'first',
-      'second',
-      'third',
-      'fourth',
-      'fifth',
-      'sixth',
-      'seventh',
-      'eighth',
-      'ninth',
-      'tenth',
-    ];
+  static addNumberedMethods() {
+    const arr = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
 
     for (let i = 0; i < arr.length; i++) {
       this[arr[i]] = async function (num) {
@@ -97,11 +86,7 @@ class SQLite extends Base {
       const throughTableName = opts.through.tableName;
       this.prototype[name] = async function () {
         const arr = await knex(name)
-          .innerJoin(
-            throughTableName,
-            `${name}.id`,
-            `${opts.through}.${name.substr(0, name.length - 1)}_id`
-          )
+          .innerJoin(throughTableName, `${name}.id`, `${opts.through}.${name.substr(0, name.length - 1)}_id`)
           .where({
             [`${opts.through}.${this.constructor.recordName}_id`]: this.id,
           })
@@ -129,26 +114,18 @@ class SQLite extends Base {
 
   // takes obj and updates that record
   async update(obj) {
-    await this.constructor
-      .knex(this.constructor.tableName)
-      .where({ id: this.id })
-      .update(obj);
-    const [record] = await this.constructor
-      .knex(this.constructor.tableName)
-      .where({
-        id: this.id,
-      });
+    await this.constructor.knex(this.constructor.tableName).where({ id: this.id }).update(obj);
+    const [record] = await this.constructor.knex(this.constructor.tableName).where({
+      id: this.id,
+    });
     return new this.constructor(record);
   }
 
   async delete() {
-    await this.constructor
-      .knex(this.constructor.tableName)
-      .where({ id: this.id })
-      .del();
+    await this.constructor.knex(this.constructor.tableName).where({ id: this.id }).del();
   }
 }
 
-SQLite.addNth();
+SQLite.addNumberedMethods();
 
 module.exports = SQLite;
