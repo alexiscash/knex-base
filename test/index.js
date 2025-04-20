@@ -39,14 +39,9 @@ async function start() {
   Post.create({ content: 'lorem ipsum', user_id: charles.id });
   Post.create({ content: 'lorem ipsum', user_id: charles.id });
 
-  // console.log(await User.first());
-  // console.log(charles);
-  // console.log(await Post.all());
-  // console.log(await charles.posts());
-
   const last = await User.last();
   console.log(await last.posts());
-  // console.log(await User.last().posts());
+  console.log(await User.last().posts());
 }
 
 clearTables();
