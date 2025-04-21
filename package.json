@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "cls && jest",
-    "fake-test": "node test/index.js"
+    "dev": "node test/index.js"
   },
   "keywords": [
     "knex",

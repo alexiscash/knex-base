@@ -30,15 +30,34 @@ describe('Basic CRUD operations with static methods', () => {
     expect(foundUser.name).toBe('alexis');
   });
 
-  it('find(): returns {} for nonexistent record', async () => {
+  it('update(): updates record', async () => {
+    await User.create({ name: 'alexis' });
+    const updatedUser = await User.update({ name: 'alexis' }, { name: 'updated alexis' });
+
+    expect(updatedUser.name).toBe('updated alexis');
+  });
+
+  it('find(): returns undefined for nonexistent record', async () => {
     const user = await User.find(1);
+    const nullUser = await User.find(null);
     expect(user).toBeUndefined();
+    expect(nullUser).toBeUndefined();
   });
 
   it('findBy(): returns the correct record', async () => {
     await User.create({ name: 'charles' });
     const user = await User.findBy({ name: 'charles' });
     expect(user.name).toBe('charles');
+  });
+
+  it('findby(): return undefined for nonexistent record', async () => {
+    const user = await User.findBy(1);
+    const emptyUser = await User.findBy({});
+    const nullUser = await User.findBy(null);
+
+    expect(user).toBeUndefined();
+    expect(emptyUser).toBeUndefined();
+    expect(nullUser).toBeUndefined();
   });
 
   it('all(): returns array of records that are instances of that class', async () => {
@@ -87,13 +106,52 @@ describe('Basic CRUD operations with static methods', () => {
     expect(tenth.name).toBe('number 10');
   });
 
-  it('last(): returns last record found', async () => {
+  it('first() second()... tenth(): return array of records after the offset', async () => {
     for (let i = 1; i <= 20; i++) {
       await User.create({ name: 'number ' + i });
     }
 
-    const last = await User.last();
-    expect(last.name).toBe('number 20');
+    const thirdPlusThree = await User.third(4);
+    expect(Array.isArray(thirdPlusThree)).toBe(true);
+    expect(thirdPlusThree.length).toBe(4);
+    expect(thirdPlusThree[3].name).toBe('number 6');
+    expect(thirdPlusThree[3] instanceof User).toBe(true);
+  });
+
+  if (
+    ('first() second()... tenth(): return undefined if none exist',
+    async () => {
+      await User.create({ name: 'number 1' });
+      await User.create({ name: 'number 2' });
+      const third = await User.third();
+      const second = await User.second();
+
+      expect(third).toBeUndefined();
+      expect(second).toBeUndefined();
+    })
+  )
+    it('last(): returns last record found', async () => {
+      for (let i = 1; i <= 20; i++) {
+        await User.create({ name: 'number ' + i });
+      }
+
+      const last = await User.last();
+      expect(last.name).toBe('number 20');
+    });
+
+  it('where(): returns records found by obj', async () => {
+    await User.create({ name: 'alexis' });
+    await User.create({ name: 'alexis' });
+    await User.create({ name: 'alexis' });
+    await User.create({ name: 'alexis' });
+    const alexisis = await User.where({ name: 'alexis' });
+
+    expect(Array.isArray(alexisis)).toBe(true);
+    expect(alexisis.length).toBe(4);
+    alexisis.forEach((alexis) => {
+      expect(alexis.name).toBe('alexis');
+      expect(alexis instanceof User).toBe(true);
+    });
   });
 });
 
@@ -106,8 +164,9 @@ describe('Basic CRUD operations with instance methods', () => {
 
   it('delete(): deletes a record', async () => {
     const user = await User.create({ name: 'burning man' });
+    const userId = user.id;
     await user.delete();
-    const foundUser = await User.find(user.id);
+    const foundUser = await User.find(userId);
     expect(foundUser).toBeUndefined();
   });
 
@@ -134,18 +193,27 @@ describe('Relational operations with instance methods', () => {
     await Post.create({ content: 'first post', user_id: user.id });
     await Post.create({ content: 'second post', user_id: user.id });
 
-    const posts = await user.posts();
+    const posts = await user.posts;
     expect(posts.length).toBe(2);
     expect(posts[0].content).toBe('first post');
     expect(posts[1].content).toBe('second post');
+    expect(posts[0] instanceof Post).toBe(true);
+  });
+
+  it('hasMany(): returns empty array if none exist', async () => {
+    const user = await User.create({ name: 'no posts' });
+    const posts = await user.posts;
+
+    expect(posts).toEqual([]);
   });
 
   it('belongsTo(): returns parent record', async () => {
-    const user = await User.create({ name: 'sally' });
-    const post = await Post.create({ content: 'this post belongs to a user', user_id: user.id });
+    const userr = await User.create({ name: 'sally' });
+    const post = await Post.create({ content: 'this post belongs to a user', user_id: userr.id });
 
-    const foundUser = await post.user();
+    const foundUser = await post.user;
 
     expect(foundUser.name).toBe('sally');
+    expect(foundUser instanceof User).toBe(true);
   });
 });
