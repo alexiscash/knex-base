@@ -26,23 +26,22 @@ User.hasMany(Like, { through: Post });
 async function clearTables() {
   await User.del();
   await Post.del();
+  // await Like.del();
 }
 
-async function start() {
-  await knex('users').insert({ name: 'alexis' });
+(async () => {
+  try {
+    await clearTables();
 
-  await User.create({ name: 'charles' });
-
-  const charles = await User.last();
-
-  Post.create({ content: 'lorem ipsum', user_id: charles.id });
-  Post.create({ content: 'lorem ipsum', user_id: charles.id });
-  Post.create({ content: 'lorem ipsum', user_id: charles.id });
-
-  const last = await User.last();
-  console.log(await last.posts());
-  console.log(await User.last().posts());
-}
-
-clearTables();
-start();
+    // whatever im testing
+    await User.create({ name: 'alexis' });
+    await User.create({ name: 'charles' });
+    const users = await User.all();
+    console.log(typeof users);
+    console.log(users);
+  } catch (err) {
+    console.error('Error during script');
+  } finally {
+    await knex.destroy();
+  }
+})();

@@ -1,5 +1,3 @@
-// let knex;
-
 class Base {
   static knex;
 
@@ -8,7 +6,7 @@ class Base {
   }
 
   static test() {
-    console.log('knex-base has been succesfully loaded');
+    console.log('knex-base has been successfully loaded');
   }
 
   static connect(connection) {

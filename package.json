@@ -4,7 +4,8 @@
   "description": "A knex ORM modeled after Rails' ActiveRecord",
   "main": "index.js",
   "scripts": {
-    "test": "node test/index.js"
+    "test": "cls && jest",
+    "fake-test": "node test/index.js"
   },
   "keywords": [
     "knex",
@@ -21,7 +22,9 @@
     "url": "https://github.com/alexiscash/knex-base/issues"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "knex": "^2.4.0",
+    "mock-knex": "^0.4.13",
     "pg": "^8.6.0",
     "sqlite3": "^5.0.2"
   }
