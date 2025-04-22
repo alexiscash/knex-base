@@ -1,9 +1,10 @@
 const mockKnex = require('mock-knex');
 
-const dbSettings = require('./knexfile').test;
+const dbSettings = require('../db/knexfile').test;
 const knex = require('knex')(dbSettings);
 
-const Base = require('../sql/Base');
+const Base = require('../../lib/Base');
+Base.connect(knex);
 
 mockKnex.mock(knex);
 
@@ -11,10 +12,6 @@ const tracker = mockKnex.getTracker();
 
 class User extends Base {}
 class Post extends Base {}
-
-beforeAll(() => {
-  Base.connect(knex);
-});
 
 beforeEach(() => {
   tracker.uninstall();

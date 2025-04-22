@@ -6,12 +6,18 @@ module.exports = {
     connection: {
       filename: ':memory:',
     },
+    migrations: {
+      directory: './test/db/migrations',
+    },
     useNullAsDefault: true,
   },
   development: {
     client: 'sqlite3',
     connection: {
-      filename: './test/dev.sqlite3',
+      filename: './test/db/dev.sqlite3',
+    },
+    migrations: {
+      directory: './test/db/migrations',
     },
     useNullAsDefault: true,
   },

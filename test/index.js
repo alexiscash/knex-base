@@ -7,7 +7,7 @@ it's possible that i will be able to reuse code from previous
 
 */
 
-const dbSettings = require('./knexfile').development;
+const dbSettings = require('./db/knexfile').development;
 const knex = require('knex')(dbSettings);
 
 const Base = require('../index')(knex).SQLite;
@@ -24,6 +24,8 @@ User.hasMany(Post);
 User.hasMany(Like, { through: Post });
 
 Post.belongsTo(User);
+
+console.log('Migrations path:', require('path').resolve(dbSettings.migrations.directory));
 
 (async () => {
   try {

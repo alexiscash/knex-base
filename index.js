@@ -1,6 +1,6 @@
-const Base = require('./sql/Base');
-const SQLite = require('./sql/SQLite');
-const PostgresSQL = require('./sql/PostgresSQL');
+const Base = require('./lib/Base');
+const SQLite = require('./lib/SQLite');
+const PostgresSQL = require('./lib/PostgresSQL');
 
 //
 module.exports = function (_knex) {
