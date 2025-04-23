@@ -20,12 +20,13 @@ class Post extends Base {}
 class Like extends Base {}
 
 User.hasMany(Post);
+User.hasManyThrough(Like, Post);
 
-User.hasMany(Like, { through: Post });
-
+Post.hasMany(Like);
 Post.belongsTo(User);
 
-console.log('Migrations path:', require('path').resolve(dbSettings.migrations.directory));
+Like.belongsTo(Post);
+Like.belongsTo(User);
 
 (async () => {
   try {
@@ -34,11 +35,20 @@ console.log('Migrations path:', require('path').resolve(dbSettings.migrations.di
 
     // whatever im testing
     const user = await User.create({ name: 'alexis' });
-    const post = await Post.create({ content: 'postsingads', user_id: user.id });
+    const post = await Post.create({ content: 'this post has many likes', user_id: user.id });
+    for (let i = 0; i < 11; i++) {
+      await Like.create({
+        post_id: post.id,
+        user_id: user.id,
+        user_name: user.name,
+      });
+    }
 
-    const postUser = await post.user;
-    console.log('defined');
-    console.log(postUser);
+    const likes = await user.likes;
+
+    console.log(user);
+    console.log(post);
+    console.log(likes);
   } catch (err) {
     console.error(err);
   } finally {
