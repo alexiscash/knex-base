@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "node test/index.js",
-    "test": "cls && jest"
+    "test": "cls && jest",
+    "migrate:make": "knex --knexfile test/db/knexfile.js migrate:make",
+    "migrate:latest": "knex --knexfile test/db/knexfile.js migrate:latest"
   },
   "keywords": [
     "knex",
@@ -23,9 +25,9 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "knex": "^2.4.0",
+    "knex": "^2.5.1",
     "mock-knex": "^0.4.13",
-    "pg": "^8.6.0",
-    "sqlite3": "^5.0.2"
+    "pg": "^8.15.1",
+    "sqlite3": "^5.1.7"
   }
 }

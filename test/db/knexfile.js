@@ -1,4 +1,4 @@
-// Update with your config settings.
+const path = require('path');
 
 module.exports = {
   test: {
@@ -7,17 +7,17 @@ module.exports = {
       filename: ':memory:',
     },
     migrations: {
-      directory: './test/db/migrations',
+      directory: path.resolve(__dirname, 'migrations'),
     },
     useNullAsDefault: true,
   },
   development: {
     client: 'sqlite3',
     connection: {
-      filename: './test/db/dev.sqlite3',
+      filename: path.resolve(__dirname, 'dev.sqlite3'),
     },
     migrations: {
-      directory: './test/db/migrations',
+      directory: path.resolve(__dirname, 'migrations'),
     },
     useNullAsDefault: true,
   },
