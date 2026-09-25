@@ -45,10 +45,15 @@ Like.belongsTo(User);
     }
 
     const likes = await user.likes;
+    const postArr = await user.posts;
 
     console.log(user);
     console.log(post);
     console.log(likes);
+    console.log(postArr);
+
+    console.log('\n\n\n\n\n');
+    console.log(Object.getOwnPropertyDescriptor(user, 'posts'));
   } catch (err) {
     console.error(err);
   } finally {

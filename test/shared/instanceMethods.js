@@ -24,7 +24,7 @@ module.exports = (knex, Model) => {
   });
 
   describe('delete()', () => {
-    it('delete(): deletes a record', async () => {
+    it('deletes a record', async () => {
       const user = await User.create({ name: 'burning man' });
       const userId = user.id;
       await user.delete();
@@ -34,7 +34,7 @@ module.exports = (knex, Model) => {
   });
 
   describe('save()', () => {
-    it('save(): inserts a new record', async () => {
+    it('inserts a new record', async () => {
       const user = new User({ name: 'saving alexis' });
       await user.save();
       const foundUser = await User.findBy({ name: 'saving alexis' });
@@ -42,7 +42,7 @@ module.exports = (knex, Model) => {
       expect(foundUser instanceof User).toBe(true);
     });
 
-    it('save(): updates an existing record', async () => {
+    it('updates an existing record', async () => {
       const user = await User.create({ name: 'alexis' });
       user.name = 'updated alexis';
       await user.save();

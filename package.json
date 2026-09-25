@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node test/index.js",
     "test": "cls && jest",
+    "testv": "cls && jest --verbose",
     "migrate:make": "knex --knexfile test/db/knexfile.js migrate:make",
     "migrate:latest": "knex --knexfile test/db/knexfile.js migrate:latest"
   },

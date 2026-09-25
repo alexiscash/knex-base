@@ -26,7 +26,7 @@ module.exports = (knex, Model) => {
   });
 
   describe('hasMany()', () => {
-    it('hasMany(): returns related records', async () => {
+    it('returns related records', async () => {
       const user = await User.create({ name: 'alexis' });
       await Post.create({ content: 'first post', user_id: user.id });
       await Post.create({ content: 'second post', user_id: user.id });
@@ -39,7 +39,7 @@ module.exports = (knex, Model) => {
       posts.forEach((r) => expect(r instanceof Post).toBe(true));
     });
 
-    it('hasMany(): returns empty array if none exist', async () => {
+    it('returns empty array if none exist', async () => {
       const user = await User.create({ name: 'no posts' });
       const posts = await user.posts;
 
@@ -49,16 +49,35 @@ module.exports = (knex, Model) => {
 
   describe('belongsTo()', () => {
     it('returns parent record', async () => {
-      const userr = await User.create({ name: 'sally' });
-      const post = await Post.create({ content: 'this post belongs to a user', user_id: userr.id });
-
+      const user = await User.create({ name: 'sally' });
+      const post = await Post.create({ content: 'this post belongs to a user', user_id: user.id });
+      for (let i = 0; i < 10; i++) {
+        await Like.create({
+          post_id: post.id,
+          user_id: user.id,
+          user_name: user.name,
+        });
+      }
       const foundUser = await post.user;
 
       expect(foundUser.name).toBe('sally');
       expect(foundUser instanceof User).toBe(true);
     });
 
-    it.todo('returns parent record with has many through relation');
+    it('returns parent record with has many through relation', async () => {
+      const user = await User.create({ name: 'sally' });
+      const post = await Post.create({ content: 'this post belongs to a user', user_id: user.id });
+      for (let i = 0; i < 10; i++) {
+        await Like.create({
+          post_id: post.id,
+          user_id: user.id,
+          user_name: user.name,
+        });
+      }
+      const like = await post.likes[0];
+
+      expect(like.user.name).toBe('sally');
+    });
   });
 
   describe('hasManyThrough()', () => {
